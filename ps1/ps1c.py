@@ -3,7 +3,7 @@
 """
 Created on Thu Mar  2 18:30:43 2017
 
-@author: silvia
+@author: sturrion
 """
 
 starting_salary = int(input("Enter the starting salary: "))
