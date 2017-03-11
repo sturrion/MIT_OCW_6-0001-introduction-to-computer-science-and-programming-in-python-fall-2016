@@ -98,7 +98,20 @@ def get_available_letters(letters_guessed):
     
     return available_letters
     
+
+def get_unique_letters(secret_word):
+    '''
+    secret_word: string, the word the user is guessing
+    returns: number of unique letters in secret_word.
+    '''
+    letters = []
+    for letter in secret_word:
+        if letter not in letters:
+            letters.append(letter)
+            
+    return len(letters)
     
+
 
 def hangman(secret_word):
     '''
@@ -125,11 +138,62 @@ def hangman(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    letters_guessed = []
+    guesses_remaining = 6
+    warnings_remaining = 3
+    
+    message = ""
+    
+    print("Welcome to the game Hangman!")
+    print("I am thinking of a word that is", len(secret_word), "letters long.")
+    print("You have", warnings_remaining, "warnings left.")
 
-
-
+    while guesses_remaining > 0 and not is_word_guessed(secret_word, letters_guessed):
+        print("-" * 13)
+        print("You have", guesses_remaining, "guesses left")
+        print("Available letters:", get_available_letters(letters_guessed))
+    
+        guess = input("Please guess a letter: ")
+        
+        if not str.isalpha(guess):
+            message = "Oops! That is not a valid letter."
+            if warnings_remaining > 0:
+                warnings_remaining -= 1
+                message = message + " " + "You have " + str(warnings_remaining) + " warnings left:"
+            else:
+                guesses_remaining -= 1
+                message = message + " " + "You have no warnings left so you lose one guess:"
+        else:
+            guess = str.lower(guess)
+            
+            if guess in letters_guessed:
+                message = "Oops! You've already guessed that letter."
+                if warnings_remaining > 0:
+                    warnings_remaining -= 1
+                    message = message + " " + "You have " + str(warnings_remaining) + " warnings left:"
+                else:
+                    guesses_remaining -= 1
+                    message = message + " " + "You have no warnings left so you lose one guess:"
+            else:
+                letters_guessed.append(guess)
+                if guess in secret_word:
+                    message = "Good guess:"
+                else:
+                    if guess in ('a','e','i','o','u'):
+                        guesses_remaining -= 2
+                    else:
+                        guesses_remaining -= 1
+                    message = "Oops! That letter is not in my word:" 
+                     
+        print(message, get_guessed_word(secret_word, letters_guessed))
+    
+    print("-" * 13)
+    if is_word_guessed(secret_word, letters_guessed):
+        print("Congratulations, you won!")
+        total_score = guesses_remaining * get_unique_letters(secret_word)
+        print("Your total score for this game is:", total_score)
+    else:
+        print("Sorry, you ran out of guesses. The word was else.")
 # When you've completed your hangman function, scroll down to the bottom
 # of the file and uncomment the first two lines to test
 #(hint: you might want to pick your own
