@@ -3,9 +3,7 @@
 # The 6.0001 Word Game
 # Created by: Kevin Luu <luuk> and Jenna Wiens <jwiens>
 #
-# Name          : <your name>
-# Collaborators : <your collaborators>
-# Time spent    : <total time>
+# Name          : Silvia Turrion
 
 import math
 import random
@@ -177,7 +175,17 @@ def update_hand(hand, word):
     returns: dictionary (string -> int)
     """
 
-    pass  # TO DO... Remove this line when you implement this function
+    new_hand = hand.copy()
+    word = word.lower()
+    
+    for letter in word:
+        if new_hand.get(letter,0) > 0:
+            new_hand[letter] -= 1
+
+        if new_hand.get(letter, -1) == 0:
+            del(new_hand[letter])
+            
+    return new_hand
 
 #
 # Problem #3: Test word validity
