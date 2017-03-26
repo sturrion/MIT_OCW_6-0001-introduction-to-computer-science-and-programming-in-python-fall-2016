@@ -14,7 +14,7 @@ CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
 
 SCRABBLE_LETTER_VALUES = {
-    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
+    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10, '*': 0
 }
 
 # -----------------------------------
@@ -143,7 +143,9 @@ def deal_hand(n):
     hand={}
     num_vowels = int(math.ceil(n / 3))
 
-    for i in range(num_vowels):
+    hand['*'] = 1
+    
+    for i in range(num_vowels-1):
         x = random.choice(VOWELS)
         hand[x] = hand.get(x, 0) + 1
     
@@ -202,12 +204,31 @@ def is_valid_word(word, hand, word_list):
     returns: boolean
     """
     word = word.lower()
+    words = []
     
-    if word not in word_list:
+    # Creates a word list with all posible words. 
+    # If there is not wildcard the list has 1 word
+    lw = list(word)
+    if '*' in lw:
+        position = lw.index('*')
+        for letter in VOWELS:
+            lw[position] = letter
+            words.append("".join(lw))
+    else:
+        words.append(word)
+
+    # Searches all posible words in word_list
+    found = False
+    for w in words:
+        if w in word_list:
+            found = True
+    
+    if not found:
         return False
     
-    word_dict = get_frequency_dict(word)
-    for letter, freq in word_dict.items():
+    # The word is entirely composed of letters in the hand
+    word_freq_dict = get_frequency_dict(word)
+    for letter, freq in word_freq_dict.items():
         if freq > hand.get(letter, 0):
             return False
     
