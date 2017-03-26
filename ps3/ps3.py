@@ -181,7 +181,7 @@ def update_hand(hand, word):
     for letter in word:
         if new_hand.get(letter,0) > 0:
             new_hand[letter] -= 1
-
+        
         if new_hand.get(letter, -1) == 0:
             del(new_hand[letter])
             
@@ -201,8 +201,18 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
-
-    pass  # TO DO... Remove this line when you implement this function
+    word = word.lower()
+    
+    if word not in word_list:
+        return False
+    
+    word_dict = get_frequency_dict(word)
+    for letter, freq in word_dict.items():
+        if freq > hand.get(letter, 0):
+            return False
+    
+    return True
+    
 
 #
 # Problem #5: Playing a hand
