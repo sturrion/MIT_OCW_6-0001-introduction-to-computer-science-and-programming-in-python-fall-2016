@@ -182,7 +182,7 @@ def test_is_valid_word(word_list):
         print("\t(If this is the only failure, make sure is_valid_word() isn't mutating its inputs)")        
         
         failure = True        
-
+        
     if not failure:
         print("SUCCESS: test_is_valid_word()")
 
